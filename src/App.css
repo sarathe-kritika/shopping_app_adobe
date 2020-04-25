@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+#title_message {
+  padding-top: 20px;
+}
+
+.button_filter {
+  padding-top: 25px;
+}
+
+.btn {
+  border-radius: 20px;
+}
