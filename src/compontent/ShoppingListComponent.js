@@ -1,6 +1,12 @@
 import React, { Component } from "react";
-import { Card, CardColumns, Button } from "react-bootstrap";
+import { Container, Card, CardColumns, Button } from "react-bootstrap";
+import { FormControl, Row, Col, Form } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import "react-input-range/lib/css/index.css";
+import InputRange from "react-input-range";
 import "../index.css";
+
 class ShoppingListComponent extends Component {
   constructor(props) {
     super(props);
@@ -8,11 +14,24 @@ class ShoppingListComponent extends Component {
     this.state = {
       coun: 0,
       itemAdded: [],
+      search: "",
+      value: { min: 10, max: 5000 },
+      isFilterOn: false,
     };
 
     this.handleClick = this.handleClick.bind(this);
   }
+  updateSearch(event) {
+    console.log("Yoo");
+    this.setState({ search: event.target.value.substr(0, 20) });
+  }
+  applyFilter() {
+    //  window.alert("Apply Filter");
+    this.setState((state) => ({ isFilterOn: true }));
+    // this.state.isFilterOn = true;
 
+    // this.setState({ value: event.target.value });
+  }
   handleClick(item) {
     this.state.itemAdded.push(item);
     var myObjectJson = JSON.stringify(this.state.itemAdded);
@@ -105,34 +124,81 @@ class ShoppingListComponent extends Component {
         discount: 64,
       },
     ];
-
+    let fC = items.filter((item) => {
+      return (
+        item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) != -1
+      );
+      /*if (this.state.isFilterOn) {
+        //window.alert("ON");
+        if (item.price.actual >= this.state.value.max != -1) return item;
+      } else {
+        return (
+          item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) != -1
+        );
+      }*/
+    });
     return (
-      <CardColumns>
-        {items.map((ingredient, index) => (
-          <Card>
-            <Card.Img
-              variant="bottom"
-              src={ingredient.image}
-              style={{ width: "10rem", height: "5rem" }}
-              //src={process.env.PUBLIC_URL + "ipphone.jpg"}
+      <Container>
+        <Row>
+          <Col className="inputfilter" id="title_message" xs={1}>
+            <InputRange
+              maxValue={100000}
+              minValue={10}
+              value={this.state.value}
+              onChange={(value) => this.setState({ value })}
             />
-            <Card.Body key={index}>
-              <Card.Title>{ingredient.name}</Card.Title>
-              <Card.Text>
-                {ingredient.price.actual}{" "}
-                <span class="lineThrough"> {ingredient.price.display}</span>
-                <b class="discount"> {ingredient.discount} % off</b>
-              </Card.Text>
-              <Button
-                variant="warning"
-                onClick={() => this.handleClick(ingredient)}
-              >
-                Add to cart
+            <div className="button_filter">
+              <Button variant="primary" onClick={() => this.applyFilter()}>
+                Apply
               </Button>
-            </Card.Body>
-          </Card>
-        ))}
-      </CardColumns>
+            </div>
+          </Col>
+
+          <Col xs={11}>
+            <Form inline className="search">
+              <FormControl
+                type="text"
+                value={this.state.search}
+                onChange={this.updateSearch.bind(this)}
+                placeholder="Search"
+                className="mr-sm-2"
+              />
+              <span>
+                <FontAwesomeIcon icon={faSearch} />
+              </span>
+            </Form>
+            <CardColumns>
+              {fC.map((ingredient, index) => (
+                <Card>
+                  <Card.Img
+                    variant="bottom"
+                    src={ingredient.image}
+                    style={{ width: "10rem", height: "5rem" }}
+                    //src={process.env.PUBLIC_URL + "ipphone.jpg"}
+                  />
+                  <Card.Body key={index}>
+                    <Card.Title>{ingredient.name}</Card.Title>
+                    <Card.Text>
+                      {ingredient.price.actual}{" "}
+                      <span class="lineThrough">
+                        {" "}
+                        {ingredient.price.display}
+                      </span>
+                      <b class="discount"> {ingredient.discount} % off</b>
+                    </Card.Text>
+                    <Button
+                      variant="warning"
+                      onClick={() => this.handleClick(ingredient)}
+                    >
+                      Add to cart
+                    </Button>
+                  </Card.Body>
+                </Card>
+              ))}
+            </CardColumns>
+          </Col>
+        </Row>
+      </Container>
     );
   }
 }

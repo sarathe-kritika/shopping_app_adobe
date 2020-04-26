@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "react-input-range/lib/css/index.css";
 import InputRange from "react-input-range";
-
 import "../index.css";
 class FilterCompontent extends Component {
   constructor(props) {

@@ -7,8 +7,6 @@ import * as serviceWorker from "./serviceWorker";
 import ShoppingCartComponent from "./compontent/ShoppingCartComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-import { FormControl, Form } from "react-bootstrap";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const routing = (
@@ -27,21 +25,7 @@ const routing = (
               />
             </Link>
           </li>
-          <li className="nav-item">
-            <Form inline className="search">
-              <FormControl
-                type="text"
-                placeholder="Search"
-                className="mr-sm-2"
-              />
-              <span>
-                <Link className="nav-link" to="/">
-                  <FontAwesomeIcon icon={faSearch} />
-                </Link>
-              </span>
-            </Form>
-          </li>
-          <li className="nav-item">
+          <li className="nav-item shopping-cart">
             <Link className="nav-link" to="/shoppingCart">
               <div>
                 {localStorage.getItem("coun") > 0 && (
