@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Container, Card, CardColumns, Button } from "react-bootstrap";
 import { FormControl, Row, Col, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faWineGlass } from "@fortawesome/free-solid-svg-icons";
 import "react-input-range/lib/css/index.css";
 import InputRange from "react-input-range";
 import "../index.css";
@@ -17,6 +17,7 @@ class ShoppingListComponent extends Component {
       search: "",
       value: { min: 10, max: 5000 },
       isFilterOn: false,
+      show: false,
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -26,7 +27,7 @@ class ShoppingListComponent extends Component {
     this.setState({ search: event.target.value.substr(0, 20) });
   }
   applyFilter() {
-    //  window.alert("Apply Filter");
+    window.alert("Apply Filter++++++++++++++++++++=");
     this.setState((state) => ({ isFilterOn: true }));
     // this.state.isFilterOn = true;
 
@@ -38,6 +39,8 @@ class ShoppingListComponent extends Component {
     // this.state.itemAdded.push(item);
     localStorage.setItem("coun", this.state.itemAdded.length);
     localStorage.setItem("itemToAdded", myObjectJson);
+    this.setState((state) => ({ show: true }));
+    // window.location.reload();
     // this.setState((state) => ({ coun: coun++ }));
   }
 
@@ -125,9 +128,32 @@ class ShoppingListComponent extends Component {
       },
     ];
     let fC = items.filter((item) => {
-      return (
-        item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) != -1
-      );
+      if (item.name.toLowerCase().indexOf(this.state.search.toLowerCase())) {
+        return (
+          item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) !==
+          -1
+        );
+      } else if (
+        this.state.isFilterOn &&
+        item.price.actual <= this.state.value.max
+      ) {
+        console.log(
+          "item.price.actual " +
+            this.state.value.max +
+            "ttttttttttttt :: " +
+            item.price.actual
+        );
+        // window.alert("Hello Jee");
+        return true;
+      } else if (this.state.value.max === 5000) {
+        console.log(
+          "item.price.actual " +
+            this.state.value.max +
+            " mmmm " +
+            item.price.actual
+        );
+        return true;
+      }
       /*if (this.state.isFilterOn) {
         //window.alert("ON");
         if (item.price.actual >= this.state.value.max != -1) return item;

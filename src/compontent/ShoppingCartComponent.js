@@ -1,22 +1,19 @@
 import React, { Component } from "react";
 import "../index.css";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row, Col, Button } from "react-bootstrap";
 import { Card } from "react-bootstrap";
 const items = JSON.parse(localStorage.getItem("itemToAdded"));
 
 class ShoppingCartComponent extends Component {
   remove(removedItem) {
-    var flag = false;
     items.forEach(function (item, index) {
-      // If the sandwich is turkey, skip it
       if (item.name === removedItem.name) {
-        delete items[item];
-        flag = true;
+        window.alert("Item Removing....." + item.name);
       }
     });
-    if (flag) {
+    /* if (flag) {
       localStorage.setItem("itemToAdded", items);
-    }
+    }*/
   }
   render() {
     //  var items = JSON.parse(localStorage.getItem("itemToAdded"));
@@ -28,7 +25,6 @@ class ShoppingCartComponent extends Component {
               <Card border="primary" style={{ width: "40rem" }}>
                 <Card.Header>{ingredient.name}</Card.Header>
                 <Card.Body>
-                  <Card.Title>Primary Card Title</Card.Title>
                   <Card.Img
                     style={{ width: "5rem", height: "3rem" }}
                     variant="bottom"
@@ -38,6 +34,12 @@ class ShoppingCartComponent extends Component {
                   {ingredient.price.actual}
                   <span class="lineThrough"> {ingredient.price.display}</span>
                   <b class="discount"> {ingredient.discount} % off</b>
+                  <Button
+                    variant="primary"
+                    onClick={() => this.remove(ingredient)}
+                  >
+                    Remove
+                  </Button>
                 </Card.Body>
               </Card>
             ))}
