@@ -8,40 +8,23 @@ import ShoppingCartComponent from "./compontent/ShoppingCartComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
+import thunk from "redux-thunk";
+import Header from "./Header.js";
+import rootReducer from "./reducers/reducer";
+const store = createStore(rootReducer, applyMiddleware(thunk));
 
 const routing = (
-  <Router>
-    <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-blue">
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <Link className="nav-link" to="/">
-              <img
-                src={process.env.PUBLIC_URL + "star.png"}
-                width="30"
-                height="30"
-                className="d-inline-block align-top"
-                alt="React Bootstrap logo"
-              />
-            </Link>
-          </li>
-          <li className="nav-item shopping-cart">
-            <Link className="nav-link" to="/shoppingCart">
-              <div>
-                {localStorage.getItem("coun") > 0 && (
-                  <div class="itemCount">{localStorage.getItem("coun")}</div>
-                )}
-                <FontAwesomeIcon icon={faShoppingCart} />
-                Cart
-              </div>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-      <Route exact path="/" component={App} />
-      <Route path="/shoppingCart" component={ShoppingCartComponent} />
-    </div>
-  </Router>
+  <Provider store={store}>
+    <Router>
+      <div>
+        <Header />
+        <Route exact path="/" component={App} />
+        <Route path="/shoppingCart" component={ShoppingCartComponent} />
+      </div>
+    </Router>
+  </Provider>
 );
 ReactDOM.render(routing, document.getElementById("root"));
 

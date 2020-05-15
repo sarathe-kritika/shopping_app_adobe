@@ -2,15 +2,22 @@ import React, { Component } from "react";
 import { Container, Card, CardColumns, Button } from "react-bootstrap";
 import { FormControl, Row, Col, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch, faWineGlass } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faRupeeSign } from "@fortawesome/free-solid-svg-icons";
 import "react-input-range/lib/css/index.css";
 import InputRange from "react-input-range";
 import "../index.css";
-
+import { connect } from "react-redux";
+import { addItem } from "../actions/itemAction";
+const mapDispatchToProps = (dispatch) => {
+  return {
+    handleClick(item) {
+      dispatch(addItem(item));
+    },
+  };
+};
 class ShoppingListComponent extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       coun: 0,
       itemAdded: [],
@@ -20,28 +27,13 @@ class ShoppingListComponent extends Component {
       show: false,
     };
 
-    this.handleClick = this.handleClick.bind(this);
+    // this.handleClick = this.handleClick.bind(this);
   }
   updateSearch(event) {
-    console.log("Yoo");
     this.setState({ search: event.target.value.substr(0, 20) });
   }
   applyFilter() {
-    window.alert("Apply Filter++++++++++++++++++++=");
     this.setState((state) => ({ isFilterOn: true }));
-    // this.state.isFilterOn = true;
-
-    // this.setState({ value: event.target.value });
-  }
-  handleClick(item) {
-    this.state.itemAdded.push(item);
-    var myObjectJson = JSON.stringify(this.state.itemAdded);
-    // this.state.itemAdded.push(item);
-    localStorage.setItem("coun", this.state.itemAdded.length);
-    localStorage.setItem("itemToAdded", myObjectJson);
-    this.setState((state) => ({ show: true }));
-    // window.location.reload();
-    // this.setState((state) => ({ coun: coun++ }));
   }
 
   render() {
@@ -137,31 +129,10 @@ class ShoppingListComponent extends Component {
         this.state.isFilterOn &&
         item.price.actual <= this.state.value.max
       ) {
-        console.log(
-          "item.price.actual " +
-            this.state.value.max +
-            "ttttttttttttt :: " +
-            item.price.actual
-        );
-        // window.alert("Hello Jee");
         return true;
       } else if (this.state.value.max === 5000) {
-        console.log(
-          "item.price.actual " +
-            this.state.value.max +
-            " mmmm " +
-            item.price.actual
-        );
         return true;
       }
-      /*if (this.state.isFilterOn) {
-        //window.alert("ON");
-        if (item.price.actual >= this.state.value.max != -1) return item;
-      } else {
-        return (
-          item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) != -1
-        );
-      }*/
     });
     return (
       <Container>
@@ -204,7 +175,11 @@ class ShoppingListComponent extends Component {
                   />
                   <Card.Body key={index}>
                     <Card.Title>{ingredient.name}</Card.Title>
+
                     <Card.Text>
+                      <span>
+                        <FontAwesomeIcon icon={faRupeeSign} />
+                      </span>
                       {ingredient.price.actual}{" "}
                       <span class="lineThrough">
                         {" "}
@@ -214,7 +189,9 @@ class ShoppingListComponent extends Component {
                     </Card.Text>
                     <Button
                       variant="warning"
-                      onClick={() => this.handleClick(ingredient)}
+                      onClick={() => {
+                        this.props.handleClick(ingredient);
+                      }}
                     >
                       Add to cart
                     </Button>
@@ -229,4 +206,4 @@ class ShoppingListComponent extends Component {
   }
 }
 
-export default ShoppingListComponent;
+export default connect(null, mapDispatchToProps)(ShoppingListComponent);

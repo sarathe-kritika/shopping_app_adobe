@@ -66,3 +66,11 @@ code {
 .inputfilter {
   margin-top: 50px;
 }
+
+.total {
+  border: 1px solid blue;
+}
+
+.remove {
+  margin-left: 3px;
+}

@@ -1,48 +1,55 @@
 import React, { Component } from "react";
-import { Navbar, Nav } from "react-bootstrap";
+import { Link, BrowserRouter as Router } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import "./index.css";
-import SearchComponent from "./compontent/SearchComponent";
-import ShoppingCartComponent from "./compontent/ShoppingCartComponent";
+import { connect } from "react-redux";
 
+const mapStateToProps = (state) => {
+  return {
+    selItem: state,
+  };
+};
 class Header extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // CartOpen: 0,
-    };
+    this.state = {};
   }
-  itemToAdd = () => {
-    //this.state.CartOpen++;
-  };
-  // data = this.state.CartOpen++;
+
+  itemToAdd = () => {};
+
   render() {
+    if (this.props.selItem !== undefined) {
+    }
     return (
       <div>
-        {" "}
-        <Navbar expand="lg" className="bg-blue">
-          <Navbar.Brand href="#home">
-            <img
-              src={process.env.PUBLIC_URL + "star.png"}
-              width="30"
-              height="30"
-              className="d-inline-block align-top"
-              alt="React Bootstrap logo"
-            />
-          </Navbar.Brand>
-
-          <SearchComponent></SearchComponent>
-          <Nav className="mr-auto">
-            <Nav.Link href="#home">
-              <ShoppingCartComponent
-                isCartOpen={this.greeting}
-                itemToAdd={this.itemToAdd}
-              />
-            </Nav.Link>
-          </Nav>
-        </Navbar>
+        <nav className="navbar navbar-expand-lg navbar-light bg-blue">
+          <ul className="navbar-nav">
+            <li className="nav-item">
+              <Link className="nav-link" to="/">
+                <img
+                  src={process.env.PUBLIC_URL + "star.png"}
+                  width="30"
+                  height="30"
+                  className="d-inline-block align-top"
+                  alt="React Bootstrap logo"
+                />
+              </Link>
+            </li>
+            <li className="nav-item shopping-cart">
+              <Link className="nav-link" to="/shoppingCart">
+                <div>
+                  <div class="itemCount">{this.props.selItem.length}</div>
+                  <FontAwesomeIcon icon={faShoppingCart} />
+                  Cart
+                </div>
+              </Link>
+            </li>
+          </ul>
+        </nav>
       </div>
     );
   }
 }
 
-export default Header;
+export default connect(mapStateToProps)(Header);
